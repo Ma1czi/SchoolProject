@@ -1,3 +1,22 @@
+<?php 
+session_start();
+include_once '../addlogs.php';
+$logfilepath = '../LogFile.txt';
+
+if(!empty($_GET['logout'])){
+    $error = $_SESSION['username']." Log out";
+    AddLog($error, $logfilepath);
+    $_SESSION['login'] = false;
+    $_SESSION['remme'] = null;
+    $_SESSION['username'] = null;
+}
+if($_SESSION['login'] == false || empty($_SESSION['login'])){
+    header("Location: ../");
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -5,53 +24,54 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pomoc Drogowa</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="../Styles/style.css" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+
 </head>
 <body>
     <div id="naglowek">
-        <img src="../Obrazy/Klucz.jpg" alt="" width="2%"> 
-        <h1>Mikołaj Bulzacki - Pomoc drogowa</h1>
-        <img src="../Obrazy/Klucz.jpg" alt="" width="2%">
+        <div id="nagleft">
+            <h1>Mikołaj Bulzacki - Pomoc drogowa </h1>
+
+        </div>
+        <div id="nagright">
+            <form action="" method="get">
+                <label for="logout"><i class="fa fa-sign-out-alt"></i></label><input type="submit" name="logout" id="logout">
+            </form>
+
+        </div>
+        <br>
+        
+        <div style="clear: both"></div>
+        User: <?php echo $_SESSION['username']; ?>
     </div>
     <div class="cialo">
         <h2>SELECT * FROM WYJAZDY</h2>
-		<table id="base"> 
-			<tr>
-				<th>Id</th>
-				<th>Data</th>
-				<th>Miejsce wyjazdu</th>
-				<th>Auto zabrane</th>
-				<th>Nazwisko</th>
-				
-			</tr>
-            <?php
-                include_once 'sendaction/connecttodatabase.php';
+        <div id="lewa">
 
-                //test connection
-				if (!$conn){
-				die("Connection failed: " . mysqli_connect_error());
-				}
-				
-				$sql = "SELECT id, data, miejsce_wyjazdu, auto_zabrane, nazwisko from wyjazdy";
-				$result = mysqli_query($conn, $sql);
-				
-				if (mysqli_num_rows($result) > 0) {
-				// output data of each row
-				while($row = mysqli_fetch_assoc($result)) {
-				echo "<tr><td>".$row["id"]."</td><td>".$row["data"]."</td><td>".$row["miejsce_wyjazdu"]."</td><td>".$row["auto_zabrane"]."</td><td>".$row["nazwisko"]."</td></tr>";
-				}
-				}
-				mysqli_close($conn);
-			?>
+            <table id="base"> 
+                <tr>
+                    <th>Id</th>
+                    <th>Data</th>
+                    <th>Miejsce wyjazdu</th>
+                    <th>Auto zabrane</th>
+                    <th>Nazwisko</th>         
+                </tr>
+                
+                <?php
+                    include_once '../sendaction/connecttodatabase.php';
+                    include '../sendaction/displayTable.php';
+                ?>
 		</table>
     </div>
+    </div>
     <div class="cialo" style="border-left: none;">
-        <table id="base">
+        <table id="prawa">
             <tr>
                 <th colspan="2" class="idu">INSERT</th>
             </tr>
             <tr>
-                <form method="POST" action="sendaction/senddate.php">
+                <form method="POST" action="../sendaction/senddate.php">
                     <td>
                         <input type="number" name="id" id="" min="1">
                         <input type="date" name="data" id="">
@@ -67,7 +87,7 @@
             </tr>
             
             <tr>
-                <form action="sendaction/deletedate.php" method="POST">
+                <form action="../sendaction/deletedate.php" method="POST">
                     <td><input type="number" name="deleteid" id="" min="1"></td>
                     <td><input type="submit" value="usuń" class="button"></td>
                 </form>
@@ -76,7 +96,7 @@
                 <th colspan="2" class="idu">UPDATE</th>
             </tr>
             <tr>
-                <form action="sendaction/updatedate.php" method="POST">
+                <form action="../sendaction/updatedate.php" method="POST">
 
                     <td>
                         <input type="number" name="updateid" id="" min="1">
@@ -88,6 +108,12 @@
                     <td>
                         <input type="submit" value="Popraw" class="button">
                     </td>
+                </form>
+            </tr>
+            <tr>
+                <td></td>
+                <form action="../sendaction/sortId.php" method="POST">
+                    <td><input type="submit" value="SortID" class="button"></td>
                 </form>
             </tr>
 
