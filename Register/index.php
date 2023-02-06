@@ -35,7 +35,7 @@ if(!empty($_POST['register'])){
         session_start();
         $_SESSION['username'] = $username; 
 
-        header("Location: ../index.php");
+        header("Location: ../");
     }
     
 }
@@ -73,7 +73,7 @@ if(!empty($_POST['register'])){
             <input type="submit" value="Register" name="register">
         </form>
         <br>
-        <a href="../index.php">Login</a>
+        <a href="../">Login</a>
     </div>
 </body>
 </html>
