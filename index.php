@@ -64,7 +64,11 @@
 					<i class="fas fa-user"></i>
 				</label>
                 <?php
-				echo "<input type='text' name='username' placeholder='Username' id='username' required value='$_SESSION[username]'><br>"
+			if(!empty($_SESSION['username'])){
+                   		 echo "<input type='text' name='username' placeholder='Username' id='username' required value='$_SESSION[username]'><br>";
+                	}else{
+                   		 echo "<input type='text' name='username' placeholder='Username' id='username' required><br>";
+                	}
                 
                 ?>
                 
